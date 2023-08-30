@@ -64,15 +64,17 @@ MainWindow::MainWindow(QWidget* parent) :
 	QObject::connect(this->ui->DrawPlot_button, &QPushButton::clicked, this, &MainWindow::onDrawSphereClick);
 	QObject::connect(this->ui->DrawPlot_button2, &QPushButton::clicked, this, &MainWindow::onDrawSphereClick2);
 
+	valueLabel = new QLabel(this);
+	valueLabel->setAlignment(Qt::AlignCenter);
+	valueLabel->setStyleSheet("font-size: 12pt; color: white;");
+	//valueLabel->setText("Value:"); // Initial text
+	this->ui->verticalLayout->addWidget(valueLabel);
 
-	//newwwwwwwwwwwwwwwww
-	//QLabel* prfNumberLabel = new QLabel(this);
-	////prfNumberLabel->setText("PRF Number:");
-	//this->ui->verticalLayout->addWidget(prfNumberLabel);
-
-	//QLabel* prfAngleLabel = new QLabel(this);
-	////prfAngleLabel->setText("PRF Angle:");
-	//this->ui->verticalLayout_2->addWidget(prfAngleLabel);
+	valueLabel2 = new QLabel(this);
+	valueLabel2->setAlignment(Qt::AlignCenter);
+	valueLabel2->setStyleSheet("font-size: 12pt; color: white;");
+	//valueLabel->setText("Value:"); // Initial text
+	this->ui->verticalLayout_2->addWidget(valueLabel2);
 
 }
 
@@ -142,18 +144,17 @@ void MainWindow::onDrawSphereClick()
 			// skip other data
 			file.seekg(sizeof(int16_t) * size, std::ios::cur);
 
-
-			//newwwwwwwwwwwwwwwww
-			std::vector<double> prfAngles;
-			std::vector<int> prfNumbers;
-
-			// Read PRF angle and PRF number
-			double prfAngle = prf.header.prf_angle;
-			int prfNumber = prf.header.prf_number;
-
-			// Store PRF angle and PRF number in vectors
-			prfAngles.push_back(prfAngle);
-			prfNumbers.push_back(prfNumber);
+			////new
+			//std::vector<double> prfAngles;
+			//std::vector<int> prfNumbers;
+			//
+			//// Read PRF angle and PRF number
+			//double prfAngle = prf.header.prf_angle;
+			//int prfNumber = prf.header.prf_number;
+			//
+			//// Store PRF angle and PRF number in vectors
+			//prfAngles.push_back(prfAngle);
+			//prfNumbers.push_back(prfNumber);
 
 		}
 
@@ -270,6 +271,7 @@ void MainWindow::onDrawSphereClick()
 
 		bool paused = false; // Flag to indicate if plotting is paused
 		int start = 0;
+		static int index = 0;
 
 		// Create a timer to trigger the chart update
 		QTimer* timer = new QTimer(this);
@@ -277,9 +279,17 @@ void MainWindow::onDrawSphereClick()
 			// Check if the plotting is paused
 			if (!paused) {
 
-				//newwwwwwwwwwwwwwwww
-				//prfNumberLabel->setText("PRF Number: ");// + QString::number(prfNumber));
-				//prfAngleLabel->setText("PRF Angle: ");// + QString::number(prfAngle));
+				//new
+				if (index < MAX_PRF_ANGLE) {
+					valueLabel->setText(QString("%1")
+						.arg(prfData[index].header.prf_number));
+					valueLabel2->setText(QString("%1")
+						.arg(prfData[index].header.prf_angle));
+					index++;
+				}
+				else {
+					timer->stop();
+				}
 
 				////High perfomrmancing
 				chart1->RemovePlot(1);
@@ -498,6 +508,8 @@ void MainWindow::onDrawSphereClick2()
 
 		bool paused = false; // Flag to indicate if plotting is paused
 		int start = 0;
+		static int index = 0;
+
 		// Create a timer to trigger the chart update
 		QTimer* timer = new QTimer(this);
 		connect(timer, &QTimer::timeout, this, [=]() mutable {
@@ -505,6 +517,19 @@ void MainWindow::onDrawSphereClick2()
 			// Check if the plotting is paused
 			if (!paused)
 			{
+				//new
+				if (index < MAX_PRF_ANGLE) {
+					valueLabel->setText(QString("%1")
+						.arg(prfData[index].header.prf_number));
+					valueLabel2->setText(QString("%1")
+						.arg(prfData[index].header.prf_angle));
+					index++;
+				}
+				else {
+					timer->stop();
+				}
+
+
 				////High performancing
 				chart1->RemovePlot(1);
 				chart1->RemovePlot(2);

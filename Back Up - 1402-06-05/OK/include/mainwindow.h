@@ -35,7 +35,9 @@ public slots:
 	void onDrawSphereClick2();
 
 
-//private:
+private:
+	QLabel* valueLabel;
+	QLabel* valueLabel2;
 //	QLabel* prfNumberLabel;
 //	QLabel* prfAngleLabel;
 	//std::vector<double>* prfAngles;
