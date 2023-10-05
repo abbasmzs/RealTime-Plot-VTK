@@ -5,7 +5,7 @@
 <img src="Test.gif">
 
 # Griding plots:
-<img src="1.PNG">
+<img src="4.PNG">
 
 # 4 Plots in one view:
-<img src="4.PNG">
+<img src="1.PNG">
